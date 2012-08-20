@@ -5,6 +5,7 @@ import android.graphics.Path;
 
 import java.util.TreeSet;
 
+import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Math.abs;
 
 public class Terrain extends TreeSet<TerrainPoint> {
@@ -22,7 +23,7 @@ public class Terrain extends TreeSet<TerrainPoint> {
     }
 
     public int highestYPos(){
-        if(highestYPos == Integer.MAX_VALUE){
+        if(highestYPos == MAX_VALUE){
             for(TerrainPoint point : this){
                 if(point.y() <  highestYPos){
                     highestYPos = point.y();

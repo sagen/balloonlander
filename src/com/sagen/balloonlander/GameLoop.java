@@ -58,6 +58,9 @@ public class GameLoop extends Thread {
                 mutexRefresh.acquire();
                 mutexRefreshing.acquire();
                 Canvas c = surfaceHolder.lockCanvas();
+                if(c == null){
+                    return;
+                }
                 balloon.tick(upPropulsion, rightPropulsion, leftPropulsion, c.getWidth(), c.getHeight());
                 if(CollisionDetector.collides(balloon, terrain)){
                     context.runOnUiThread(new Runnable() {

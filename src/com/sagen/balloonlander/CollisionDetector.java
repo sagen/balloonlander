@@ -18,17 +18,23 @@ public class CollisionDetector {
 
         NavigableSet<TerrainPoint> subTerrain = terrain.subSet(xPoint(balloon.x()), true, xPoint(balloon.x() + balloon.width()), true);
         boolean belowHighestTerrainSpot = false;
-        for(TerrainPoint p : subTerrain)
-            if(p.y() <= balloon.y() + balloon.height())
+
+        for(TerrainPoint p : subTerrain){
+            if(p.y() <= balloon.y() + balloon.height()){
                 belowHighestTerrainSpot = true;
-        if(!belowHighestTerrainSpot)
+            }
+        }
+
+        if(!belowHighestTerrainSpot){
             return false;
-        for(TerrainPoint p : subTerrain)
-            if(!balloon.transparent(p.x() - balloon.x(), p.y() - balloon.y()))
+        }
+
+        for(TerrainPoint p : subTerrain){
+            if(!balloon.transparent(p.x() - balloon.x(), p.y() - balloon.y())){
                 return true;
+            }
+        }
+
         return false;
-
-
-
     }
 }
