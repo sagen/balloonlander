@@ -32,6 +32,14 @@ public class Balloon {
         return drawer.height();
     }
 
+    public int landingAreaXPosStart(){
+        return drawer.getLandingAreaXStart() + physics.x();
+    }
+
+    public int landingAreaXPosEnd(){
+        return drawer.getLandingAreaXEnd() + physics.x();
+    }
+
     public void tick(boolean upPropulsion, boolean rightPropulsion, boolean leftPropulsion, int width, int height) {
         physics.tick(upPropulsion, rightPropulsion, leftPropulsion, width, height, drawer.width(), drawer.height());
     }

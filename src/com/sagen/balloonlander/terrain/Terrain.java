@@ -6,11 +6,12 @@ import android.graphics.Path;
 import java.util.TreeSet;
 
 import static java.lang.Integer.MAX_VALUE;
-import static java.lang.Math.abs;
 
 public class Terrain extends TreeSet<TerrainPoint> {
     public Path pathCache;
     int highestYPos;
+    private TerrainPoint landingSpotStart;
+    private TerrainPoint landingSpotEnd;
 
     public static TerrainPoint xPoint(int x) {
         return new TerrainPoint(x, 0);
@@ -31,6 +32,18 @@ public class Terrain extends TreeSet<TerrainPoint> {
             }
         }
         return highestYPos;
+    }
+
+    public void setLandingSpot(TerrainPoint from, TerrainPoint to){
+        add(from);
+        add(to);
+        this.landingSpotStart = from;
+        this.landingSpotEnd = to;
+    }
+
+    public boolean isWithinLandingArea(int xPosFrom, int xPosTo, int yPos){
+        return !(landingSpotStart == null || landingSpotEnd == null)
+                && yPos >= landingSpotStart.y() && xPosFrom < landingSpotEnd.x() && xPosTo > landingSpotStart.x();
     }
 
     public Path getPath(Canvas c){

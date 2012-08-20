@@ -1,6 +1,5 @@
 package com.sagen.balloonlander;
 
-import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -9,12 +8,11 @@ import com.sagen.R;
 import com.sagen.balloonlander.balloon.Balloon;
 
 import static android.view.MotionEvent.ACTION_UP;
-import static java.lang.Thread.sleep;
 
 public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     GameLoop gameLoop;
 
-    public Panel(MyActivity context) {
+    public Panel(MainActivity context) {
         super(context);
         while(getHolder() == null){
             try {
@@ -28,7 +26,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        gameLoop = new GameLoop((MyActivity)getContext(), new Balloon(getResources().getDrawable(R.drawable.balloon)), surfaceHolder, getWidth(), getHeight());
+        gameLoop = new GameLoop(new Balloon(getResources().getDrawable(R.drawable.balloon)), surfaceHolder, getWidth(), getHeight());
 
         setOnTouchListener(new OnTouchListener() {
             @Override
@@ -51,13 +49,9 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {}
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {}
 }
 

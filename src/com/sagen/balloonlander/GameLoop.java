@@ -1,24 +1,18 @@
 package com.sagen.balloonlander;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
-import android.widget.Toast;
 import com.sagen.balloonlander.balloon.Balloon;
 import com.sagen.balloonlander.terrain.Terrain;
-import com.sagen.balloonlander.terrain.TerrainPoint;
+import com.sagen.balloonlander.terrain.TerrainDrawer;
 
-import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import static android.graphics.Color.GREEN;
+import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
-import static android.graphics.Paint.Style.FILL;
 import static com.sagen.balloonlander.terrain.TerrainCreator.generateTerrain;
 
 
@@ -30,14 +24,14 @@ public class GameLoop extends Thread {
     boolean upPropulsion = false;
     boolean rightPropulsion = false;
     boolean leftPropulsion = false;
-    private Terrain terrain;
-    private MyActivity context;
+    private TerrainDrawer terrainDrawer;
+    private final Terrain terrain;
 
-    public GameLoop(MyActivity context,Balloon balloon, SurfaceHolder surfaceHolder, int width, int height) {
-        this.context = context;
+    public GameLoop(Balloon balloon, SurfaceHolder surfaceHolder, int width, int height) {
         this.balloon = balloon;
         this.surfaceHolder = surfaceHolder;
-        this.terrain = generateTerrain(width, height);
+        terrain = generateTerrain(width, height);
+        this.terrainDrawer = new TerrainDrawer(terrain);
     }
 
     @Override
@@ -46,52 +40,49 @@ public class GameLoop extends Thread {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if(mutexRefreshing.tryAcquire()){
+                if (mutexRefreshing.tryAcquire()) {
                     mutexRefreshing.release();
                     mutexRefresh.release();
                 }
             }
-        }, 0, 1000/60);
+        }, 0, 1000 / 60);
+        boolean collision = false, landed = false;
 
         while (true) {
-            try{
+            try {
                 mutexRefresh.acquire();
                 mutexRefreshing.acquire();
                 Canvas c = surfaceHolder.lockCanvas();
-                if(c == null){
+                if (c == null) {
                     return;
                 }
                 balloon.tick(upPropulsion, rightPropulsion, leftPropulsion, c.getWidth(), c.getHeight());
-                if(CollisionDetector.collides(balloon, terrain)){
-                    context.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Paint paint = new Paint();
-                            paint.setColor(WHITE);
-                            Canvas c = surfaceHolder.lockCanvas();
-                            c.drawText("Kaputttt!!", 10, 10, paint);
-                            surfaceHolder.unlockCanvasAndPost(c);
-                        }
-                    });
+                if(LandingDetector.landed(terrain, balloon)){
+                    landed = true;
+                }else if (CollisionDetector.collides(terrain, balloon)) {
+                    collision = true;
                 }
                 clearCanvas(c);
-                drawTerrain(c);
+                terrainDrawer.draw(c);
                 balloon.drawOnCanvas(c);
+                if (collision || landed) {
+                    Paint paint = new Paint();
+                    paint.setColor(WHITE);
+                    c.drawText(collision? "Kaputttt!!" : "WEEEEEEE!!!", 10, 10, paint);
+                }
                 surfaceHolder.unlockCanvasAndPost(c);
                 mutexRefreshing.release();
-            }catch(InterruptedException irEx){
+                if(collision || landed){
+                    return;
+                }
+            } catch (InterruptedException irEx) {
                 break;
             }
         }
     }
+
     private void clearCanvas(Canvas c) {
-        c.drawColor(Color.BLACK);
+        c.drawColor(BLACK);
     }
 
-    private void drawTerrain(Canvas c) {
-        Paint paint = new Paint();
-        paint.setStyle(FILL);
-        paint.setColor(GREEN);
-        c.drawPath(terrain.getPath(c), paint);
-    }
 }

@@ -43,8 +43,7 @@ public class TerrainCreator {
         NavigableSet<TerrainPoint> toRemove = terrain.subSet(xPoint(startXPos), true, xPoint(startXPos + spotXSpace), true);
         int centerYPos = (toRemove.first().y + toRemove.last().y) / 2;
         toRemove.clear();
-        terrain.add(new TerrainPoint(startXPos, centerYPos));
-        terrain.add(new TerrainPoint(startXPos + spotXSpace, centerYPos));
+        terrain.setLandingSpot(new TerrainPoint(startXPos, centerYPos), new TerrainPoint(startXPos + spotXSpace, centerYPos));
     }
 
 

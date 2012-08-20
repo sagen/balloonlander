@@ -3,16 +3,16 @@ package com.sagen.balloonlander.balloon;
 
 import static java.lang.Math.*;
 
-public class BalloonPhysics {
-    public final static int MAX_Y_UP_SPEED = -3;
-    public final static int MAX_Y_DOWN_SPEED = 7;
+class BalloonPhysics {
+    private final static int MAX_Y_UP_SPEED = -3;
+    private final static int MAX_Y_DOWN_SPEED = 7;
     private double x, y;
     private double dx, dy;
 
 
-    public BalloonPhysics() {}
+    BalloonPhysics() {}
 
-    public void tick(boolean propulseUp, boolean propulseRight, boolean propulseLeft, int width, int height, int balloonWidth, int balloonHeight) {
+    void tick(boolean propulseUp, boolean propulseRight, boolean propulseLeft, int width, int height, int balloonWidth, int balloonHeight) {
         updateY(propulseUp, height, balloonHeight);
         updateX(propulseRight, propulseLeft, width, balloonWidth);
     }
@@ -46,11 +46,11 @@ public class BalloonPhysics {
         }
     }
 
-    public int x() {
+    int x() {
         return (int) round(x);
     }
 
-    public int y() {
+    int y() {
         return (int) round(y);
     }
 }
