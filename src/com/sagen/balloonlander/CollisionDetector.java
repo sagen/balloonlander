@@ -10,7 +10,7 @@ import java.util.NavigableSet;
 import static com.sagen.balloonlander.terrain.Terrain.xPoint;
 
 public class CollisionDetector {
-    public static boolean collides(Terrain terrain, Balloon balloon){
+    public static boolean collides(Balloon balloon, Terrain terrain){
         if(balloon.y() + balloon.height() < terrain.highestYPos())
             return false;
 

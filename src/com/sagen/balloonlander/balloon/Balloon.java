@@ -47,4 +47,8 @@ public class Balloon {
     public void drawOnCanvas(Canvas c) {
         drawer.drawOnCanvas(c, physics.x(), physics.y());
     }
+
+    public void drawDebugInfo(Canvas c) {
+        physics.drawDebugInfo(c);
+    }
 }

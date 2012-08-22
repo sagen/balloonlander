@@ -1,7 +1,13 @@
 package com.sagen.balloonlander.balloon;
 
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+
+import static android.graphics.Color.GREEN;
 import static java.lang.Math.*;
+import static java.lang.String.format;
 
 class BalloonPhysics {
     private final static int MAX_Y_UP_SPEED = -3;
@@ -52,5 +58,12 @@ class BalloonPhysics {
 
     int y() {
         return (int) round(y);
+    }
+
+    void drawDebugInfo(Canvas c){
+        Paint paint = new Paint();
+        paint.setColor(GREEN);
+        c.drawText(format("Hor: %.2f", dx), 10, 10, paint);
+        c.drawText(format("Ver: %.2f", dy), 10, 25, paint);
     }
 }

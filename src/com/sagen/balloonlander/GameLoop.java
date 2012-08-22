@@ -13,6 +13,8 @@ import java.util.concurrent.Semaphore;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
+import static com.sagen.balloonlander.CollisionDetector.collides;
+import static com.sagen.balloonlander.LandingDetector.lands;
 import static com.sagen.balloonlander.terrain.TerrainCreator.generateTerrain;
 
 
@@ -47,36 +49,38 @@ public class GameLoop extends Thread {
             }
         }, 0, 1000 / 60);
         boolean collision = false, landed = false;
-
+        Canvas c = null;
         while (true) {
             try {
                 mutexRefresh.acquire();
                 mutexRefreshing.acquire();
-                Canvas c = surfaceHolder.lockCanvas();
+                c = surfaceHolder.lockCanvas();
                 if (c == null) {
                     return;
                 }
                 balloon.tick(upPropulsion, rightPropulsion, leftPropulsion, c.getWidth(), c.getHeight());
-                if(LandingDetector.landed(terrain, balloon)){
+                if(lands(balloon, terrain)){
                     landed = true;
-                }else if (CollisionDetector.collides(terrain, balloon)) {
+                }else if (collides(balloon, terrain)) {
                     collision = true;
                 }
                 clearCanvas(c);
                 terrainDrawer.draw(c);
                 balloon.drawOnCanvas(c);
+                balloon.drawDebugInfo(c);
                 if (collision || landed) {
                     Paint paint = new Paint();
                     paint.setColor(WHITE);
-                    c.drawText(collision? "Kaputttt!!" : "WEEEEEEE!!!", 10, 10, paint);
-                }
-                surfaceHolder.unlockCanvasAndPost(c);
-                mutexRefreshing.release();
-                if(collision || landed){
+                    c.drawText(collision? "Kaputttt!!" : "WEEEEEEE!!!", 10, 60, paint);
                     return;
                 }
             } catch (InterruptedException irEx) {
                 break;
+            }finally{
+                if(c != null){
+                    surfaceHolder.unlockCanvasAndPost(c);
+                }
+                mutexRefreshing.release();
             }
         }
     }
