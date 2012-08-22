@@ -3,16 +3,16 @@ package com.sagen.balloonlander.balloon;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
-public class Balloon {
+public class Balloon  {
     BalloonDrawer drawer;
     BalloonPhysics physics;
 
-    public Balloon(Drawable balloonImage) {
+    public Balloon(Drawable balloonImage, int sceneWidth) {
         drawer = new BalloonDrawer(balloonImage);
-        physics = new BalloonPhysics();
+        physics = new BalloonPhysics(sceneWidth, drawer.width());
     }
 
-    public int x(){
+    public int x() {
         return physics.x();
     }
 
@@ -20,11 +20,11 @@ public class Balloon {
         return x < 0 || y < 0 || x >= drawer.width() || y >= drawer.height() || drawer.transparent(x, y);
     }
 
-    public int y(){
+    public int y() {
         return physics.y();
     }
 
-    public int width(){
+    public int width() {
         return drawer.width();
     }
 
@@ -32,23 +32,39 @@ public class Balloon {
         return drawer.height();
     }
 
-    public int landingAreaXPosStart(){
+    public int landingAreaXPosStart() {
         return drawer.getLandingAreaXStart() + physics.x();
     }
 
-    public int landingAreaXPosEnd(){
+    public int landingAreaXPosEnd() {
         return drawer.getLandingAreaXEnd() + physics.x();
     }
 
-    public void tick(boolean upPropulsion, boolean rightPropulsion, boolean leftPropulsion, int width, int height) {
-        physics.tick(upPropulsion, rightPropulsion, leftPropulsion, width, height, drawer.width(), drawer.height());
+    public void updatePhysics(long now) {
+        physics.update(now);
     }
 
     public void drawOnCanvas(Canvas c) {
         drawer.drawOnCanvas(c, physics.x(), physics.y());
     }
 
-    public void drawDebugInfo(Canvas c) {
-        physics.drawDebugInfo(c);
+    public void left(boolean enable) {
+        physics.left(enable);
+    }
+
+    public void right(boolean enable) {
+        physics.right(enable);
+    }
+
+    public void up(boolean enable) {
+        physics.up(enable);
+    }
+
+    public double dx() {
+        return physics.dx();
+    }
+
+    public double dy() {
+        return physics.dy();
     }
 }

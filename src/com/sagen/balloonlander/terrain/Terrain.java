@@ -12,6 +12,7 @@ public class Terrain extends TreeSet<TerrainPoint> {
     int highestYPos;
     private TerrainPoint landingSpotStart;
     private TerrainPoint landingSpotEnd;
+    private TerrainDrawer terrainDrawer = new TerrainDrawer();
 
     public static TerrainPoint xPoint(int x) {
         return new TerrainPoint(x, 0);
@@ -46,7 +47,7 @@ public class Terrain extends TreeSet<TerrainPoint> {
                 && yPos >= landingSpotStart.y() && xPosFrom < landingSpotEnd.x() && xPosTo > landingSpotStart.x();
     }
 
-    public Path getPath(Canvas c){
+    private Path getPath(int height){
         if(pathCache == null){
             pathCache = new Path();
             for(TerrainPoint point : this){
@@ -56,11 +57,15 @@ public class Terrain extends TreeSet<TerrainPoint> {
                 }
                 pathCache.lineTo(point.x(), point.y());
             }
-            pathCache.lineTo(c.getWidth(), c.getHeight());
-            pathCache.lineTo(0, c.getHeight());
+            pathCache.lineTo(this.last().x(), height);
+            pathCache.lineTo(0, height);
             pathCache.close();
         }
         return pathCache;
+    }
+
+    public void drawOnCanvas(Canvas c){
+        terrainDrawer.draw(getPath(c.getHeight()), c);
     }
 
 
