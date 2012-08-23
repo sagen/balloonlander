@@ -16,7 +16,6 @@ public class DebugDrawer {
         horText = "Hor:  -0.0".toCharArray();
         verText = "Ver:  -0.0".toCharArray();
         fpsText = "FPS: 000".toCharArray();
-
     }
 
     static void drawDebugInfo(Canvas c, Balloon b, double fps) {
@@ -26,10 +25,8 @@ public class DebugDrawer {
     }
 
     private static void drawFPS(Canvas c, double fps) {
-        fpsText[5] = (char) (((int) '0') + (int) fps / 100);
-        fpsText[5] = fpsText[5] == '0' ? ' ' : fpsText[5];
-        fpsText[6] = (char) (((int) '0') + (int) (fps % 100) / 10);
-        fpsText[6] = fpsText[6] == '0' ? ' ' : fpsText[6];
+        fpsText[5] = (fps > 99) ? (char) (((int) '0') + (int) fps / 100) : ' ';
+        fpsText[6] = (fps > 9) ? (char) (((int) '0') + (int) (fps % 100) / 10) : ' ';
         fpsText[7] = (char) (((int) '0') + (int) fps % 10);
         c.drawText(fpsText, 0, fpsText.length, 10, 40, paint);
     }
