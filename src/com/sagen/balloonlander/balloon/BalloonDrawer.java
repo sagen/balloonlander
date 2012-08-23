@@ -35,7 +35,6 @@ class BalloonDrawer {
         return 19;
     }
 
-
     void drawOnCanvas(Canvas c, int x, int y){
         c.drawBitmap((balloon).getBitmap(), (float) x, (float) y, paint);
     }

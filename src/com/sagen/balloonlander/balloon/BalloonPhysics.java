@@ -1,22 +1,18 @@
 package com.sagen.balloonlander.balloon;
 
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-
-import static android.graphics.Color.GREEN;
 import static java.lang.Math.*;
-import static java.lang.String.format;
 import static java.lang.System.nanoTime;
 
 class BalloonPhysics {
     private final static int MAX_Y_UP_SPEED = -3;
     private final static int MAX_Y_DOWN_SPEED = 7;
+    private static final int MAX_X_SPEED = 5;
     public static final double HORIZONTAL_ACCELERATION_INCREASE_PER_SECOND = 9;
     public static final double HORIZONTAL_ACCELERATION_DECREASE_PER_SECOND = 3;
     public static final double VERTICAL_ACCELERATION_INCREASE_PER_TICK = 6;
-    public static final double GRAVITY_PER_TICK = 1.8;
 
+    public static final double GRAVITY_PER_TICK = 1.8;
     private double x, y;
     private double dx, dy;
     private long lastUpdate = nanoTime();
@@ -44,8 +40,19 @@ class BalloonPhysics {
     private void xMovementSinceLastUpdate(long now) {
         accelerateHorizontally(now);
         decreaseSpeedIfIdle(now);
+        limitHorizontalAcceleration();
         stopIfHittingBoundaries();
         x += dx;
+    }
+
+    private void limitHorizontalAcceleration() {
+        dx = max(min(dx, MAX_X_SPEED), -MAX_X_SPEED);
+    }
+
+    private void yMovementSinceLastUpdate(long now) {
+        updateVerticalAcceleration(now);
+        limitVerticalAcceleration();
+        y += dy;
     }
 
     private void decreaseSpeedIfIdle(long now) {
@@ -58,7 +65,6 @@ class BalloonPhysics {
         } else {
             dx += HORIZONTAL_ACCELERATION_DECREASE_PER_SECOND * secondsSinceLastUpdate(now);
         }
-
     }
 
     private void stopIfHittingBoundaries() {
@@ -74,12 +80,6 @@ class BalloonPhysics {
         if (movingLeft) {
             dx -= secondsSinceLastUpdate(now) * HORIZONTAL_ACCELERATION_INCREASE_PER_SECOND;
         }
-    }
-
-    private void yMovementSinceLastUpdate(long now) {
-        updateVerticalAcceleration(now);
-        limitVerticalAcceleration();
-        y += dy;
     }
 
     private void limitVerticalAcceleration() {

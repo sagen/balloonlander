@@ -1,8 +1,6 @@
 package com.sagen.balloonlander;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -12,9 +10,8 @@ import com.sagen.balloonlander.terrain.Terrain;
 import static android.graphics.Color.BLACK;
 import static android.view.MotionEvent.ACTION_UP;
 import static com.sagen.balloonlander.CollisionDetector.collides;
-import static com.sagen.balloonlander.DebugDrawer.drawDebugInfo;
-import static com.sagen.balloonlander.DebugDrawer.drawDebugInfoCrashed;
-import static com.sagen.balloonlander.DebugDrawer.drawDebugInfoLanded;
+import static com.sagen.balloonlander.DebugDrawer.*;
+import static com.sagen.balloonlander.LandingDetector.landedHard;
 import static com.sagen.balloonlander.LandingDetector.lands;
 import static com.sagen.balloonlander.terrain.TerrainCreator.generateTerrain;
 import static java.lang.System.nanoTime;
@@ -23,7 +20,6 @@ import static java.lang.System.nanoTime;
 public class GameLoop extends Thread implements View.OnTouchListener {
     private Balloon balloon;
     private SurfaceHolder surfaceHolder;
-
     private final Terrain terrain;
 
     public GameLoop(Balloon balloon, SurfaceHolder surfaceHolder, int width, int height) {
@@ -50,26 +46,25 @@ public class GameLoop extends Thread implements View.OnTouchListener {
                 return;
             }
             balloon.updatePhysics((long)now);
-            clearCanvas(c);
+            c.drawColor(BLACK);
             terrain.drawOnCanvas(c);
             balloon.drawOnCanvas(c);
-            //drawDebugInfo(c, balloon, fps);
+            drawDebugInfo(c, balloon, fps);
             if (collides(balloon, terrain)) {
                 drawDebugInfoCrashed(c);
                 break;
             }else if(lands(balloon, terrain)){
-                drawDebugInfoLanded(c);
+                if(landedHard(balloon)){
+                    drawDebugInfoLandedTooHard(c);
+                }else{
+                    drawDebugInfoLanded(c);
+                }
                 break;
             }
             surfaceHolder.unlockCanvasAndPost(c);
-
             lastNow = now;
         }
         surfaceHolder.unlockCanvasAndPost(c);
-    }
-
-    private void clearCanvas(Canvas c) {
-        c.drawColor(BLACK);
     }
 
     @Override

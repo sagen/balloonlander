@@ -67,8 +67,16 @@ public class Terrain extends TreeSet<TerrainPoint> {
                 && yPos >= landingSpotStart.y() && xPosFrom < landingSpotEnd.x() && xPosTo > landingSpotStart.x();
     }
 
+    TerrainPoint startLandingSpot(){
+        return landingSpotStart;
+    }
+
+    TerrainPoint endLandingSpot(){
+        return landingSpotEnd;
+    }
+
     public void drawOnCanvas(Canvas c){
-        terrainDrawer.draw(path, c);
+        terrainDrawer.draw(this, c);
     }
 
 
