@@ -2,6 +2,7 @@ package com.sagen.balloonlander;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -33,12 +34,17 @@ public class GameLoop extends Thread implements View.OnTouchListener {
 
     @Override
     public void run() {
-        double fps = 0;
+        double fps = -1;
         double lastNow = nanoTime();
-        Canvas c = null;
+        double now;
+        Canvas c;
         while (true) {
-            double now = nanoTime();
-            fps = fps * 0.9d + (1000000000d / (now - lastNow)) * 0.1d;
+            now = nanoTime();
+            if(fps == -1){
+                fps = 1000000000d / (now - lastNow);
+            }else{
+                fps = fps * 0.9d + (1000000000d / (now - lastNow)) * 0.1d;
+            }
             c = surfaceHolder.lockCanvas();
             if (c == null) {
                 return;
@@ -47,7 +53,7 @@ public class GameLoop extends Thread implements View.OnTouchListener {
             clearCanvas(c);
             terrain.drawOnCanvas(c);
             balloon.drawOnCanvas(c);
-            drawDebugInfo(c, balloon, fps);
+            //drawDebugInfo(c, balloon, fps);
             if (collides(balloon, terrain)) {
                 drawDebugInfoCrashed(c);
                 break;
@@ -56,6 +62,7 @@ public class GameLoop extends Thread implements View.OnTouchListener {
                 break;
             }
             surfaceHolder.unlockCanvasAndPost(c);
+
             lastNow = now;
         }
         surfaceHolder.unlockCanvasAndPost(c);

@@ -8,11 +8,14 @@ import static android.graphics.Color.GREEN;
 import static android.graphics.Paint.Style.FILL;
 
 public class TerrainDrawer {
-
-    public void draw(Path path, Canvas c) {
-        Paint paint = new Paint();
+    private Paint paint;
+    public TerrainDrawer(){
+        paint = new Paint();
         paint.setStyle(FILL);
         paint.setColor(GREEN);
+    }
+
+    public void draw(Path path, Canvas c) {
         c.drawPath(path, paint);
     }
 }

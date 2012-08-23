@@ -21,7 +21,7 @@ public class TerrainPoint implements Comparable<TerrainPoint>{
 
     @Override
     public int compareTo(TerrainPoint o) {
-        return o == null ? -1 : valueOf(x).compareTo(o.x);
+        return o == null ? -1 : x - o.x;
     }
 
 }

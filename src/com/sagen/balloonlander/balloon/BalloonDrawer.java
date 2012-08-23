@@ -9,6 +9,7 @@ import static android.graphics.Color.TRANSPARENT;
 
 class BalloonDrawer {
     private BitmapDrawable balloon;
+    private Paint paint = new Paint();
 
     BalloonDrawer(Drawable balloon){
         this.balloon = (BitmapDrawable) balloon;
@@ -36,7 +37,7 @@ class BalloonDrawer {
 
 
     void drawOnCanvas(Canvas c, int x, int y){
-        c.drawBitmap((balloon).getBitmap(), (float) x, (float) y, new Paint());
+        c.drawBitmap((balloon).getBitmap(), (float) x, (float) y, paint);
     }
 
 }

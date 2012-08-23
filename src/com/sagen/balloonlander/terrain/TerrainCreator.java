@@ -18,6 +18,7 @@ public class TerrainCreator {
         generateTerrainPoints(width / 2, terrain.first().y, terrain.last().y, (int) ((lowerBoundYPos - upperBoundYPos) * 0.9), width / 2, 3, lowerBoundYPos, terrain);
         createLandingSpot(terrain);
         lowerTerrainToLowerBoundPos(terrain, lowerBoundYPos);
+        terrain.generateCacheAndGraphicsPath(height);
         return terrain;
     }
 

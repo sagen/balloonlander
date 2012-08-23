@@ -8,11 +8,31 @@ import java.util.TreeSet;
 import static java.lang.Integer.MAX_VALUE;
 
 public class Terrain extends TreeSet<TerrainPoint> {
-    public Path pathCache;
+    public Path path;
     int highestYPos;
     private TerrainPoint landingSpotStart;
     private TerrainPoint landingSpotEnd;
     private TerrainDrawer terrainDrawer = new TerrainDrawer();
+    private TerrainPoint[] arrayCache;
+
+    public void generateCacheAndGraphicsPath(int sceneHeight) {
+        path = new Path();
+        this.arrayCache = toArray(new TerrainPoint[size()]);
+        for(TerrainPoint point : this){
+            if(this.first().equals(point)){
+                path.moveTo(point.x(), point.y());
+                continue;
+            }
+            path.lineTo(point.x(), point.y());
+        }
+        path.lineTo(this.last().x(), sceneHeight);
+        path.lineTo(0, sceneHeight);
+        path.close();
+    }
+
+    public TerrainPoint[] asArray(){
+        return arrayCache;
+    }
 
     public static TerrainPoint xPoint(int x) {
         return new TerrainPoint(x, 0);
@@ -47,25 +67,8 @@ public class Terrain extends TreeSet<TerrainPoint> {
                 && yPos >= landingSpotStart.y() && xPosFrom < landingSpotEnd.x() && xPosTo > landingSpotStart.x();
     }
 
-    private Path getPath(int height){
-        if(pathCache == null){
-            pathCache = new Path();
-            for(TerrainPoint point : this){
-                if(this.first().equals(point)){
-                    pathCache.moveTo(point.x(), point.y());
-                    continue;
-                }
-                pathCache.lineTo(point.x(), point.y());
-            }
-            pathCache.lineTo(this.last().x(), height);
-            pathCache.lineTo(0, height);
-            pathCache.close();
-        }
-        return pathCache;
-    }
-
     public void drawOnCanvas(Canvas c){
-        terrainDrawer.draw(getPath(c.getHeight()), c);
+        terrainDrawer.draw(path, c);
     }
 
 
