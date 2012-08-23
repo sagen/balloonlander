@@ -8,11 +8,14 @@ class BalloonPhysics {
     private final static int MAX_Y_UP_SPEED = -3;
     private final static int MAX_Y_DOWN_SPEED = 7;
     private static final int MAX_X_SPEED = 5;
-    public static final double HORIZONTAL_ACCELERATION_INCREASE_PER_SECOND = 9;
-    public static final double HORIZONTAL_ACCELERATION_DECREASE_PER_SECOND = 3;
-    public static final double VERTICAL_ACCELERATION_INCREASE_PER_TICK = 6;
+    private static final double HORIZONTAL_ACCELERATION_INCREASE_PER_SECOND = 9;
+    private static final double HORIZONTAL_ACCELERATION_DECREASE_PER_SECOND = 3;
+    private static final double VERTICAL_ACCELERATION_INCREASE_PER_SECOND = 6;
+    private static final double GRAVITY_PER_TICK = 1.8;
+    private static final int INITIAL_FUEL = 100;
+    private static final double DECREASE_FUEL_PER_CONSUMPTION_SECOND = 5;
 
-    public static final double GRAVITY_PER_TICK = 1.8;
+    private double fuel;
     private double x, y;
     private double dx, dy;
     private long lastUpdate = nanoTime();
@@ -30,7 +33,21 @@ class BalloonPhysics {
     void update(long now) {
         yMovementSinceLastUpdate(now);
         xMovementSinceLastUpdate(now);
+        fuelSinceLastUpdate(now);
         lastUpdate = now;
+    }
+
+    private void fuelSinceLastUpdate(long now) {
+        double decrease = secondsSinceLastUpdate(now) * DECREASE_FUEL_PER_CONSUMPTION_SECOND;
+        if(movingUp) {
+            fuel -= decrease;
+        }
+        if(movingLeft){
+            fuel -= decrease;
+        }
+        if(movingRight){
+            fuel -= decrease;
+        }
     }
 
     private double secondsSinceLastUpdate(long now) {
@@ -88,7 +105,7 @@ class BalloonPhysics {
 
     private void updateVerticalAcceleration(long now) {
         if(movingUp){
-            dy -= VERTICAL_ACCELERATION_INCREASE_PER_TICK * secondsSinceLastUpdate(now);
+            dy -= VERTICAL_ACCELERATION_INCREASE_PER_SECOND * secondsSinceLastUpdate(now);
         }else{
             dy += GRAVITY_PER_TICK * secondsSinceLastUpdate(now);
         }
@@ -120,6 +137,10 @@ class BalloonPhysics {
 
     double dy(){
         return dy;
+    }
+
+    double fuel(){
+        return fuel;
     }
 
 }

@@ -52,6 +52,10 @@ public class Balloon  {
         physics.left(enable);
     }
 
+    public double fuel() {
+        return physics.fuel();
+    }
+
     public void right(boolean enable) {
         physics.right(enable);
     }
