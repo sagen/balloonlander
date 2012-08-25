@@ -36,27 +36,30 @@ public class GameLoop extends Thread implements View.OnTouchListener {
         Canvas c;
         while (true) {
             now = nanoTime();
-            if(fps == -1){
+            if (fps == -1) {
                 fps = 1000000000d / (now - lastNow);
-            }else{
+            } else {
                 fps = fps * 0.9d + (1000000000d / (now - lastNow)) * 0.1d;
             }
             c = surfaceHolder.lockCanvas();
             if (c == null) {
                 return;
             }
-            balloon.updatePhysics((long)now);
+            balloon.updatePhysics((long) now);
             c.drawColor(BLACK);
             terrain.drawOnCanvas(c);
             balloon.drawOnCanvas(c);
             drawDebugInfo(c, balloon, fps);
-            if (collides(balloon, terrain)) {
+            if (balloon.fuel() <= 0) {
+                DebugDrawer.drawDebugInfoOutOfFuel(c);
+                break;
+            } else if (collides(balloon, terrain)) {
                 drawDebugInfoCrashed(c);
                 break;
-            }else if(lands(balloon, terrain)){
-                if(landedHard(balloon)){
+            } else if (lands(balloon, terrain)) {
+                if (landedHard(balloon)) {
                     drawDebugInfoLandedTooHard(c);
-                }else{
+                } else {
                     drawDebugInfoLanded(c);
                 }
                 break;

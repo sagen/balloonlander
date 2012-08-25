@@ -6,10 +6,12 @@ import android.graphics.drawable.Drawable;
 public class Balloon  {
     BalloonDrawer drawer;
     BalloonPhysics physics;
+    FuelGaugeDrawer fuelDrawer;
 
     public Balloon(Drawable balloonImage, int sceneWidth) {
         drawer = new BalloonDrawer(balloonImage);
         physics = new BalloonPhysics(sceneWidth, drawer.width());
+        fuelDrawer = new FuelGaugeDrawer();
     }
 
     public int x() {
@@ -46,6 +48,7 @@ public class Balloon  {
 
     public void drawOnCanvas(Canvas c) {
         drawer.drawOnCanvas(c, physics.x(), physics.y());
+        fuelDrawer.drawOnCanvas(c, physics.fuel());
     }
 
     public void left(boolean enable) {

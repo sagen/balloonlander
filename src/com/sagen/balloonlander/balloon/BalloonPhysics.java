@@ -12,8 +12,8 @@ class BalloonPhysics {
     private static final double HORIZONTAL_ACCELERATION_DECREASE_PER_SECOND = 3;
     private static final double VERTICAL_ACCELERATION_INCREASE_PER_SECOND = 6;
     private static final double GRAVITY_PER_TICK = 1.8;
-    private static final int INITIAL_FUEL = 100;
-    private static final double DECREASE_FUEL_PER_CONSUMPTION_SECOND = 5;
+    static final int INITIAL_FUEL = 100;
+    private static final double DECREASE_FUEL_PER_CONSUMPTION_SECOND = 20;
 
     private double fuel;
     private double x, y;
@@ -28,6 +28,7 @@ class BalloonPhysics {
     BalloonPhysics(int sceneWidth, int balloonWidth) {
         this.sceneWidth = sceneWidth;
         this.balloonWidth = balloonWidth;
+        fuel = INITIAL_FUEL;
     }
 
     void update(long now) {
@@ -47,6 +48,9 @@ class BalloonPhysics {
         }
         if(movingRight){
             fuel -= decrease;
+        }
+        if(fuel < 0){
+            fuel = 0;
         }
     }
 

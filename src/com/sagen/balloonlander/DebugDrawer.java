@@ -42,6 +42,10 @@ public class DebugDrawer {
         c.drawText("Kappoooww!!", 10, 65, paint);
     }
 
+    static void drawDebugInfoOutOfFuel(Canvas c) {
+        c.drawText("Out of fuel!!", 10, 65, paint);
+    }
+
     static void drawDebugInfoLanded(Canvas c) {
         c.drawText("Weeeeeeeee", 10, 65, paint);
     }
