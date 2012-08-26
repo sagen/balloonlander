@@ -29,7 +29,7 @@ public class TerrainDrawer {
             c.drawRect(terrain.landingStart.x, terrain.landingStart.y, terrain.landingEnd.x,
                     terrain.landingStart.y + 5, landingPaint);
         }else{
-            int zoomX = zoomBoxXPos(zoomLevel, c.getHeight(), xViewPos);
+            int zoomX = zoomBoxXPos(zoomLevel, c.getWidth(), xViewPos);
             int zoomY = zoomBoxYPos(zoomLevel, c.getHeight(), yViewPos);
             zoomTransformMatrix.setScale(zoomLevel, zoomLevel);
             zoomTransformMatrix.postTranslate(-zoomX, -zoomY);

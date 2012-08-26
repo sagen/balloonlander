@@ -46,10 +46,10 @@ public class GameLoop extends Thread implements View.OnTouchListener {
             balloon.updatePhysics((long) now);
             c.drawColor(BLACK);
             if(ProximityDetector.shouldZoom(balloon, terrain)){
-                terrain.drawOnCanvas(c, 3, balloon.physics.roundedX, balloon.physics.roundedY, c.getHeight());
+                terrain.drawOnCanvas(c, 3, balloon.physics.roundedX, balloon.physics.roundedY);
                 balloon.drawOnCanvas(c, 3);
             }else{
-                terrain.drawOnCanvas(c, 1,  balloon.physics.roundedX, balloon.physics.roundedY, c.getHeight());
+                terrain.drawOnCanvas(c, 1,  balloon.physics.roundedX, balloon.physics.roundedY);
                 balloon.drawOnCanvas(c, 1);
             }
 

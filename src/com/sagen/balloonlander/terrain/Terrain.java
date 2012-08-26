@@ -65,7 +65,7 @@ public class Terrain extends TreeSet<TerrainPoint> {
                 && yPos >= landingStart.y && xPosFrom < landingEnd.x && xPosTo > landingStart.x;
     }
 
-    public void drawOnCanvas(Canvas c, int zoomLevel, int xViewPos, int yViewPos, int canvasHeight){
+    public void drawOnCanvas(Canvas c, int zoomLevel, int xViewPos, int yViewPos){
         terrainDrawer.draw(this, c, zoomLevel, xViewPos, yViewPos);
     }
 
