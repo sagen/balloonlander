@@ -1,33 +1,42 @@
 package com.sagen.balloonlander.terrain;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Path;
 
 import java.util.TreeSet;
 
+import static com.sagen.balloonlander.ZoomUtil.zoomBoxXPos;
+import static com.sagen.balloonlander.ZoomUtil.zoomBoxYPos;
 import static java.lang.Integer.MAX_VALUE;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class Terrain extends TreeSet<TerrainPoint> {
-    public Path path;
-    int highestYPos;
-    private TerrainPoint landingSpotStart;
-    private TerrainPoint landingSpotEnd;
+    public Path orgPath, transformedPath;
+    public int highestYPos;
+    TerrainPoint landingStart;
+    TerrainPoint landingEnd;
     private TerrainDrawer terrainDrawer = new TerrainDrawer();
     private TerrainPoint[] arrayCache;
 
-    public void generateCacheAndGraphicsPath(int sceneHeight) {
-        path = new Path();
+    public void generateCacheAndGraphicsPath(int canvasHeight) {
+        orgPath = new Path();
         this.arrayCache = toArray(new TerrainPoint[size()]);
         for(TerrainPoint point : this){
+            if(point.y < highestYPos){
+                highestYPos = point.y;
+            }
             if(this.first().equals(point)){
-                path.moveTo(point.x(), point.y());
+                orgPath.moveTo(point.x, point.y);
                 continue;
             }
-            path.lineTo(point.x(), point.y());
+            orgPath.lineTo(point.x, point.y);
         }
-        path.lineTo(this.last().x(), sceneHeight);
-        path.lineTo(0, sceneHeight);
-        path.close();
+        orgPath.lineTo(last().x, canvasHeight);
+        orgPath.lineTo(0, canvasHeight);
+        orgPath.close();
+        transformedPath = new Path(orgPath);
     }
 
     public TerrainPoint[] asArray(){
@@ -40,43 +49,24 @@ public class Terrain extends TreeSet<TerrainPoint> {
 
     public void setOffsetY(int offset) {
         for(TerrainPoint point : this){
-            point.offsetY = offset;
+            point.y += offset;
         }
-    }
-
-    public int highestYPos(){
-        if(highestYPos == MAX_VALUE){
-            for(TerrainPoint point : this){
-                if(point.y() <  highestYPos){
-                    highestYPos = point.y();
-                }
-            }
-        }
-        return highestYPos;
     }
 
     public void setLandingSpot(TerrainPoint from, TerrainPoint to){
         add(from);
         add(to);
-        this.landingSpotStart = from;
-        this.landingSpotEnd = to;
+        this.landingStart = from;
+        this.landingEnd = to;
     }
 
     public boolean isWithinLandingArea(int xPosFrom, int xPosTo, int yPos){
-        return !(landingSpotStart == null || landingSpotEnd == null)
-                && yPos >= landingSpotStart.y() && xPosFrom < landingSpotEnd.x() && xPosTo > landingSpotStart.x();
+        return !(landingStart == null || landingEnd == null)
+                && yPos >= landingStart.y && xPosFrom < landingEnd.x && xPosTo > landingStart.x;
     }
 
-    TerrainPoint startLandingSpot(){
-        return landingSpotStart;
-    }
-
-    TerrainPoint endLandingSpot(){
-        return landingSpotEnd;
-    }
-
-    public void drawOnCanvas(Canvas c){
-        terrainDrawer.draw(this, c);
+    public void drawOnCanvas(Canvas c, int zoomLevel, int xViewPos, int yViewPos, int canvasHeight){
+        terrainDrawer.draw(this, c, zoomLevel, xViewPos, yViewPos);
     }
 
 

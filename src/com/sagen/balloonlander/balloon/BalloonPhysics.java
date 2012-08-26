@@ -4,16 +4,16 @@ package com.sagen.balloonlander.balloon;
 import static java.lang.Math.*;
 import static java.lang.System.nanoTime;
 
-class BalloonPhysics {
-    private final static int MAX_Y_UP_SPEED = -3;
-    private final static int MAX_Y_DOWN_SPEED = 7;
-    private static final int MAX_X_SPEED = 5;
-    private static final double HORIZONTAL_ACCELERATION_INCREASE_PER_SECOND = 9;
-    private static final double HORIZONTAL_ACCELERATION_DECREASE_PER_SECOND = 3;
-    private static final double VERTICAL_ACCELERATION_INCREASE_PER_SECOND = 6;
-    private static final double GRAVITY_PER_TICK = 1.8;
+public class BalloonPhysics {
+    private final static int MAX_Y_UP_SPEED = -2;
+    private final static int MAX_Y_DOWN_SPEED = 6;
+    private static final int MAX_X_SPEED = 4;
+    private static final double HORIZONTAL_ACCELERATION_INCREASE_PER_SECOND = 7;
+    private static final double HORIZONTAL_ACCELERATION_DECREASE_PER_SECOND = 2;
+    private static final double VERTICAL_ACCELERATION_INCREASE_PER_SECOND = 4;
+    private static final double GRAVITY_PER_TICK = 1.3;
     static final int INITIAL_FUEL = 100;
-    private static final double DECREASE_FUEL_PER_CONSUMPTION_SECOND = 20;
+    private static final double DECREASE_FUEL_PER_CONSUMPTION_SECOND = 15;
 
     private double fuel;
     private double x, y;
@@ -24,6 +24,7 @@ class BalloonPhysics {
     private boolean movingUp;
     private boolean movingRight;
     private boolean movingLeft;
+    public int roundedX, roundedY;
 
     BalloonPhysics(int sceneWidth, int balloonWidth) {
         this.sceneWidth = sceneWidth;
@@ -64,6 +65,7 @@ class BalloonPhysics {
         limitHorizontalAcceleration();
         stopIfHittingBoundaries();
         x += dx;
+        roundedX = (int) round(x);
     }
 
     private void limitHorizontalAcceleration() {
@@ -74,6 +76,7 @@ class BalloonPhysics {
         updateVerticalAcceleration(now);
         limitVerticalAcceleration();
         y += dy;
+        roundedY = (int) round(y);
     }
 
     private void decreaseSpeedIfIdle(long now) {
@@ -125,14 +128,6 @@ class BalloonPhysics {
 
     public void left(boolean enable) {
         this.movingLeft = enable;
-    }
-
-    int x() {
-        return (int) round(x);
-    }
-
-    int y() {
-        return (int) round(y);
     }
 
     double dx(){

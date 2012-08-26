@@ -9,10 +9,8 @@ import com.sagen.balloonlander.terrain.Terrain;
 
 import static android.graphics.Color.BLACK;
 import static android.view.MotionEvent.ACTION_UP;
-import static com.sagen.balloonlander.CollisionDetector.collides;
 import static com.sagen.balloonlander.DebugDrawer.*;
-import static com.sagen.balloonlander.LandingDetector.landedHard;
-import static com.sagen.balloonlander.LandingDetector.lands;
+import static com.sagen.balloonlander.ProximityDetector.*;
 import static com.sagen.balloonlander.terrain.TerrainCreator.generateTerrain;
 import static java.lang.System.nanoTime;
 
@@ -47,8 +45,14 @@ public class GameLoop extends Thread implements View.OnTouchListener {
             }
             balloon.updatePhysics((long) now);
             c.drawColor(BLACK);
-            terrain.drawOnCanvas(c);
-            balloon.drawOnCanvas(c);
+            if(ProximityDetector.shouldZoom(balloon, terrain)){
+                terrain.drawOnCanvas(c, 3, balloon.physics.roundedX, balloon.physics.roundedY, c.getHeight());
+                balloon.drawOnCanvas(c, 3);
+            }else{
+                terrain.drawOnCanvas(c, 1,  balloon.physics.roundedX, balloon.physics.roundedY, c.getHeight());
+                balloon.drawOnCanvas(c, 1);
+            }
+
             drawDebugInfo(c, balloon, fps);
             if (balloon.fuel() <= 0) {
                 DebugDrawer.drawDebugInfoOutOfFuel(c);

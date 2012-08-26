@@ -4,50 +4,37 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
 public class Balloon  {
-    BalloonDrawer drawer;
-    BalloonPhysics physics;
-    FuelGaugeDrawer fuelDrawer;
+    final BalloonDrawer drawer;
+    final FuelGaugeDrawer fuelDrawer;
+    final public BalloonPhysics physics;
+    public final int width, height;
 
-    public Balloon(Drawable balloonImage, int sceneWidth) {
-        drawer = new BalloonDrawer(balloonImage);
+    public Balloon(Drawable balloonImage, Drawable zoomed3BalloonImage, int sceneWidth) {
+        drawer = new BalloonDrawer(balloonImage, zoomed3BalloonImage);
         physics = new BalloonPhysics(sceneWidth, drawer.width());
         fuelDrawer = new FuelGaugeDrawer();
-    }
-
-    public int x() {
-        return physics.x();
+        width = drawer.width();
+        height = drawer.height();
     }
 
     public boolean transparent(int x, int y) {
-        return x < 0 || y < 0 || x >= drawer.width() || y >= drawer.height() || drawer.transparent(x, y);
-    }
-
-    public int y() {
-        return physics.y();
-    }
-
-    public int width() {
-        return drawer.width();
-    }
-
-    public int height() {
-        return drawer.height();
+        return x < 0 || y < 0 || x >= width || y >= height || drawer.transparent(x, y);
     }
 
     public int landingAreaXPosStart() {
-        return drawer.getLandingAreaXStart() + physics.x();
+        return drawer.getLandingAreaXStart() + physics.roundedX;
     }
 
     public int landingAreaXPosEnd() {
-        return drawer.getLandingAreaXEnd() + physics.x();
+        return drawer.getLandingAreaXEnd() + physics.roundedX;
     }
 
     public void updatePhysics(long now) {
         physics.update(now);
     }
 
-    public void drawOnCanvas(Canvas c) {
-        drawer.drawOnCanvas(c, physics.x(), physics.y());
+    public void drawOnCanvas(Canvas c, int zoomLevel) {
+        drawer.drawOnCanvas(c, physics.roundedX, physics.roundedY, zoomLevel);
         fuelDrawer.drawOnCanvas(c, physics.fuel());
     }
 
