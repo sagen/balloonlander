@@ -11,7 +11,7 @@ public class TerrainCreator {
 
     public static Terrain generateTerrain(int width, int height){
         int upperBoundYPos = (int) (height * 0.6);
-        int lowerBoundYPos = height - 4;
+        int lowerBoundYPos = height - 30;
         Terrain terrain = new Terrain();
         terrain.add(new TerrainPoint(0, randomWithin(lowerBoundYPos, upperBoundYPos)));
         terrain.add(new TerrainPoint(width, randomWithin(lowerBoundYPos, upperBoundYPos)));

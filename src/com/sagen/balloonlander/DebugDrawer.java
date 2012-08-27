@@ -2,7 +2,7 @@ package com.sagen.balloonlander;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import com.sagen.balloonlander.balloon.Balloon;
+import com.sagen.balloonlander.balloon.BalloonController;
 
 import static android.graphics.Color.GREEN;
 import static java.lang.Math.abs;
@@ -18,7 +18,7 @@ public class DebugDrawer {
         fpsText = "FPS: 000".toCharArray();
     }
 
-    static void drawDebugInfo(Canvas c, Balloon b, double fps) {
+    static void drawDebugInfo(Canvas c, BalloonController b, double fps) {
         drawAcceleration(c, b.dx(), 10, horText);
         drawAcceleration(c, b.dy(), 25, verText);
         drawFPS(c, fps);

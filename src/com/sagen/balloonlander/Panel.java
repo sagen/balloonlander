@@ -1,10 +1,9 @@
 package com.sagen.balloonlander;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import com.sagen.R;
-import com.sagen.balloonlander.balloon.Balloon;
 
 
 public class Panel extends SurfaceView implements SurfaceHolder.Callback {
@@ -24,7 +23,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     class GameStarter extends Thread {
-        private SurfaceHolder surfaceHolder;
+        final SurfaceHolder surfaceHolder;
 
         GameStarter(SurfaceHolder surfaceHolder) {
             this.surfaceHolder = surfaceHolder;
@@ -33,9 +32,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
         @Override
         public void run() {
             while (true) {
-                Balloon balloon = new Balloon(getResources().getDrawable(R.drawable.balloon),
-                        getResources().getDrawable(R.drawable.balloon_zoom2), getWidth());
-                gameLoop = new GameLoop(balloon, surfaceHolder, getWidth(), getHeight());
+                gameLoop = new GameLoop(Panel.this, this.surfaceHolder);
                 setOnTouchListener(gameLoop);
                 gameLoop.start();
                 try {
@@ -49,6 +46,10 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
             }
         }
+    }
+
+    public Drawable drawable(int drawableId){
+        return getResources().getDrawable(drawableId);
     }
 
     @Override

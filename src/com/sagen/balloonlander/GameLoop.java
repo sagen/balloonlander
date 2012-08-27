@@ -4,11 +4,13 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
-import com.sagen.balloonlander.balloon.Balloon;
+import com.sagen.R;
+import com.sagen.balloonlander.balloon.BalloonController;
 import com.sagen.balloonlander.terrain.Terrain;
 
 import static android.graphics.Color.BLACK;
-import static android.view.MotionEvent.ACTION_UP;
+import static android.view.MotionEvent.*;
+import static com.sagen.R.drawable.*;
 import static com.sagen.balloonlander.DebugDrawer.*;
 import static com.sagen.balloonlander.ProximityDetector.*;
 import static com.sagen.balloonlander.terrain.TerrainCreator.generateTerrain;
@@ -17,14 +19,18 @@ import static java.lang.System.nanoTime;
 
 public class GameLoop extends Thread implements View.OnTouchListener {
     public static final int ZOOM_LEVEL = 2;
-    private Balloon balloon;
-    private SurfaceHolder surfaceHolder;
+    private final BalloonController balloon;
+    private final SurfaceHolder surfaceHolder;
     private final Terrain terrain;
+    private final ArrowDrawer arrowDrawer;
+    private final int width;
 
-    public GameLoop(Balloon balloon, SurfaceHolder surfaceHolder, int width, int height) {
-        this.balloon = balloon;
+    public GameLoop(Panel view, SurfaceHolder surfaceHolder) {
+        this.width = view.getWidth();
+        balloon = new BalloonController(view.drawable(R.drawable.balloon), view.drawable(balloon_zoom2), view.getWidth());
         this.surfaceHolder = surfaceHolder;
-        terrain = generateTerrain(width, height);
+        terrain = generateTerrain(view.getWidth(), view.getHeight());
+        this.arrowDrawer = new ArrowDrawer(view.drawable(arrow));
     }
 
     @Override
@@ -46,16 +52,17 @@ public class GameLoop extends Thread implements View.OnTouchListener {
             }
             balloon.updatePhysics((long) now);
             c.drawColor(BLACK);
-            if(shouldZoom(balloon, terrain)){
+            if (shouldZoom(balloon, terrain)) {
                 terrain.drawOnCanvas(c, ZOOM_LEVEL, balloon.physics.roundedX, balloon.physics.roundedY,
                         balloon.width, balloon.height);
                 balloon.drawOnCanvas(c, ZOOM_LEVEL);
-            }else{
+            } else {
                 terrain.drawOnCanvas(c);
                 balloon.drawOnCanvas(c, 1);
             }
 
             drawDebugInfo(c, balloon, fps);
+            arrowDrawer.drawOnCanvas(c);
             //drawGuideLines(c);
             if (balloon.fuel() <= 0) {
                 DebugDrawer.drawDebugInfoOutOfFuel(c);
@@ -78,14 +85,23 @@ public class GameLoop extends Thread implements View.OnTouchListener {
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent motionEvent) {
-        if (motionEvent.getY() > surfaceHolder.getSurfaceFrame().height() * 0.75) {
-            balloon.up(motionEvent.getAction() != ACTION_UP);
-        } else if (motionEvent.getX() < surfaceHolder.getSurfaceFrame().width() * 0.3) {
-            balloon.right(motionEvent.getAction() != ACTION_UP);
-        } else if (motionEvent.getX() > surfaceHolder.getSurfaceFrame().width() * 0.6) {
-            balloon.left(motionEvent.getAction() != ACTION_UP);
+    public boolean onTouch(View v, MotionEvent m) {
+        boolean up = false, right = false, left = false;
+        for (int i = 0; i < m.getPointerCount(); i++) {
+            if (m.getActionIndex() == i && m.getActionMasked() == ACTION_POINTER_UP || m.getAction() == ACTION_UP) {
+                continue;
+            }
+            if (m.getX(i) < width * 0.33) {
+                right = true;
+            } else if (m.getX(i) > width * 0.67) {
+                left = true;
+            } else {
+                up = true;
+            }
         }
+        balloon.up(up);
+        balloon.left(left);
+        balloon.right(right);
         return true;
 
     }

@@ -1,7 +1,7 @@
 package com.sagen.balloonlander;
 
 
-import com.sagen.balloonlander.balloon.Balloon;
+import com.sagen.balloonlander.balloon.BalloonController;
 import com.sagen.balloonlander.terrain.Terrain;
 import com.sagen.balloonlander.terrain.TerrainPoint;
 
@@ -9,7 +9,7 @@ import static java.lang.Math.abs;
 
 public class ProximityDetector {
 
-    public static boolean collides(Balloon balloon, Terrain terrain){
+    public static boolean collides(BalloonController balloon, Terrain terrain){
         if(balloon.physics.roundedX + balloon.height < terrain.highestYPos)
             return false;
         for(TerrainPoint p : terrain.asArray()){
@@ -21,16 +21,16 @@ public class ProximityDetector {
         return false;
     }
 
-    public static boolean lands(Balloon balloon, Terrain terrain){
+    public static boolean lands(BalloonController balloon, Terrain terrain){
         return terrain.isWithinLandingArea(balloon.landingAreaXPosStart(), balloon.landingAreaXPosEnd(),
                 balloon.physics.roundedY + balloon.height);
     }
 
-    public static boolean landedHard(Balloon balloon){
+    public static boolean landedHard(BalloonController balloon){
         return abs(balloon.dx()) > 0.5 || abs(balloon.dy()) > 1;
     }
 
-    public static boolean shouldZoom(Balloon balloon, Terrain terrain){
+    public static boolean shouldZoom(BalloonController balloon, Terrain terrain){
         if(balloon.physics.roundedY + (balloon.height * 4) < terrain.highestYPos)
             return false;
 

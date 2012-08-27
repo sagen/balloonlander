@@ -6,14 +6,14 @@ import static java.lang.System.nanoTime;
 
 public class BalloonPhysics {
     private final static int MAX_Y_UP_SPEED = -2;
-    private final static int MAX_Y_DOWN_SPEED = 6;
+    private final static int MAX_Y_DOWN_SPEED = 4;
     private static final int MAX_X_SPEED = 4;
     private static final double HORIZONTAL_ACCELERATION_INCREASE_PER_SECOND = 7;
-    private static final double HORIZONTAL_ACCELERATION_DECREASE_PER_SECOND = 2;
-    private static final double VERTICAL_ACCELERATION_INCREASE_PER_SECOND = 4;
-    private static final double GRAVITY_PER_TICK = 1.3;
+    private static final double HORIZONTAL_ACCELERATION_DECREASE_PER_SECOND = 0.6;
+    private static final double VERTICAL_ACCELERATION_INCREASE_PER_SECOND = 2.5;
+    private static final double GRAVITY_PER_SECOND = 0.8;
     static final int INITIAL_FUEL = 100;
-    private static final double DECREASE_FUEL_PER_CONSUMPTION_SECOND = 15;
+    private static final double DECREASE_FUEL_PER_CONSUMPTION_SECOND = 20;
 
     private double fuel;
     private double x, y;
@@ -30,6 +30,7 @@ public class BalloonPhysics {
         this.sceneWidth = sceneWidth;
         this.balloonWidth = balloonWidth;
         fuel = INITIAL_FUEL;
+        x = sceneWidth / 2 - balloonWidth / 2;
     }
 
     void update(long now) {
@@ -114,7 +115,7 @@ public class BalloonPhysics {
         if(movingUp){
             dy -= VERTICAL_ACCELERATION_INCREASE_PER_SECOND * secondsSinceLastUpdate(now);
         }else{
-            dy += GRAVITY_PER_TICK * secondsSinceLastUpdate(now);
+            dy += GRAVITY_PER_SECOND * secondsSinceLastUpdate(now);
         }
     }
 

@@ -3,7 +3,7 @@ package com.sagen.balloonlander.balloon;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
-public class Balloon  {
+public class BalloonController {
     public static final int LANDABLE_SURFACE_X_START = 15;
     public static final int LANDABLE_SURFACE_X_END = 19;
     final BalloonDrawer drawer;
@@ -11,7 +11,7 @@ public class Balloon  {
     final public BalloonPhysics physics;
     public final int width, height;
 
-    public Balloon(Drawable balloonImage, Drawable balloonImageZoomed, int sceneWidth) {
+    public BalloonController(Drawable balloonImage, Drawable balloonImageZoomed, int sceneWidth) {
         drawer = new BalloonDrawer(balloonImage, balloonImageZoomed);
         physics = new BalloonPhysics(sceneWidth, drawer.width());
         fuelDrawer = new FuelGaugeDrawer();
@@ -40,12 +40,12 @@ public class Balloon  {
         fuelDrawer.drawOnCanvas(c, physics.fuel());
     }
 
-    public void left(boolean enable) {
-        physics.left(enable);
-    }
-
     public double fuel() {
         return physics.fuel();
+    }
+
+    public void left(boolean enable) {
+        physics.left(enable);
     }
 
     public void right(boolean enable) {
