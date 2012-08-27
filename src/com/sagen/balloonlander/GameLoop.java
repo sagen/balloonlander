@@ -16,6 +16,7 @@ import static java.lang.System.nanoTime;
 
 
 public class GameLoop extends Thread implements View.OnTouchListener {
+    public static final int ZOOM_LEVEL = 2;
     private Balloon balloon;
     private SurfaceHolder surfaceHolder;
     private final Terrain terrain;
@@ -45,15 +46,17 @@ public class GameLoop extends Thread implements View.OnTouchListener {
             }
             balloon.updatePhysics((long) now);
             c.drawColor(BLACK);
-            if(ProximityDetector.shouldZoom(balloon, terrain)){
-                terrain.drawOnCanvas(c, 3, balloon.physics.roundedX, balloon.physics.roundedY);
-                balloon.drawOnCanvas(c, 3);
+            if(shouldZoom(balloon, terrain)){
+                terrain.drawOnCanvas(c, ZOOM_LEVEL, balloon.physics.roundedX, balloon.physics.roundedY,
+                        balloon.width, balloon.height);
+                balloon.drawOnCanvas(c, ZOOM_LEVEL);
             }else{
-                terrain.drawOnCanvas(c, 1,  balloon.physics.roundedX, balloon.physics.roundedY);
+                terrain.drawOnCanvas(c);
                 balloon.drawOnCanvas(c, 1);
             }
 
             drawDebugInfo(c, balloon, fps);
+            //drawGuideLines(c);
             if (balloon.fuel() <= 0) {
                 DebugDrawer.drawDebugInfoOutOfFuel(c);
                 break;

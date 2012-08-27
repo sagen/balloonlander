@@ -31,6 +31,11 @@ public class DebugDrawer {
         c.drawText(fpsText, 0, fpsText.length, 10, 40, paint);
     }
 
+    static void drawGuideLines(Canvas c){
+        c.drawLine(c.getWidth() / 2, 0, c.getWidth() / 2, c.getHeight(), paint);
+        c.drawLine(0, c.getHeight() / 2, c.getWidth(), c.getHeight() / 2, paint);
+    }
+
     private static void drawAcceleration(Canvas c, double acc, int y, char[] text) {
         text[6] = acc < 0 ? '-' : ' ';
         text[7] = (char) (((int) '0') + (int) abs(acc));

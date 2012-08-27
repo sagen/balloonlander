@@ -8,6 +8,7 @@ import static com.sagen.balloonlander.ZoomUtil.zoomBoxXPos;
 import static com.sagen.balloonlander.ZoomUtil.zoomBoxYPos;
 
 public class TerrainDrawer {
+    public static final int LANDING_SPOT_HEIGHT = 5;
     private Paint terrainPaint;
     private Paint landingPaint;
     Path zoomedPath;
@@ -23,22 +24,22 @@ public class TerrainDrawer {
         zoomTransformMatrix = new Matrix();
     }
 
-    public void draw(Terrain terrain, Canvas c, int zoomLevel, int xViewPos, int yViewPos) {
-        if(zoomLevel == 1){
-            c.drawPath(terrain.orgPath, terrainPaint);
-            c.drawRect(terrain.landingStart.x, terrain.landingStart.y, terrain.landingEnd.x,
-                    terrain.landingStart.y + 5, landingPaint);
-        }else{
-            int zoomX = zoomBoxXPos(zoomLevel, c.getWidth(), xViewPos);
-            int zoomY = zoomBoxYPos(zoomLevel, c.getHeight(), yViewPos);
-            zoomTransformMatrix.setScale(zoomLevel, zoomLevel);
-            zoomTransformMatrix.postTranslate(-zoomX, -zoomY);
-            terrain.orgPath.transform(zoomTransformMatrix, zoomedPath);
-            c.drawPath(zoomedPath, terrainPaint);
-            c.drawRect(terrain.landingStart.x * zoomLevel - zoomX, terrain.landingStart.y * zoomLevel - zoomY,
-                    terrain.landingEnd.x * zoomLevel - zoomX,
-                    terrain.landingStart.y * zoomLevel - zoomY + (5 * zoomLevel), landingPaint);
-        }
+    public void draw(Terrain terrain, Canvas c){
+        c.drawPath(terrain.orgPath, terrainPaint);
+        TerrainPoint start = terrain.landingStart;
+        c.drawRect(start.x, start.y, terrain.landingEnd.x, start.y + LANDING_SPOT_HEIGHT, landingPaint);
+    }
+
+    public void draw(Terrain terrain, Canvas c, int zoomLevel, int balloonX, int balloonY, int balloonWidth, int balloonHeight) {
+        int zoomX = zoomBoxXPos(zoomLevel, c.getWidth(), balloonX, balloonWidth);
+        int zoomY = zoomBoxYPos(zoomLevel, c.getHeight(), balloonY, balloonHeight);
+        zoomTransformMatrix.setScale(zoomLevel, zoomLevel);
+        zoomTransformMatrix.postTranslate(-zoomX, -zoomY);
+        terrain.orgPath.transform(zoomTransformMatrix, zoomedPath);
+        c.drawPath(zoomedPath, terrainPaint);
+        c.drawRect(terrain.landingStart.x * zoomLevel - zoomX, terrain.landingStart.y * zoomLevel - zoomY,
+                terrain.landingEnd.x * zoomLevel - zoomX,
+                terrain.landingStart.y * zoomLevel - zoomY + (LANDING_SPOT_HEIGHT * zoomLevel), landingPaint);
 
     }
 }

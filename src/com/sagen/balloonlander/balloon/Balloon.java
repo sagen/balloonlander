@@ -4,13 +4,15 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
 public class Balloon  {
+    public static final int LANDABLE_SURFACE_X_START = 15;
+    public static final int LANDABLE_SURFACE_X_END = 19;
     final BalloonDrawer drawer;
     final FuelGaugeDrawer fuelDrawer;
     final public BalloonPhysics physics;
     public final int width, height;
 
-    public Balloon(Drawable balloonImage, Drawable zoomed3BalloonImage, int sceneWidth) {
-        drawer = new BalloonDrawer(balloonImage, zoomed3BalloonImage);
+    public Balloon(Drawable balloonImage, Drawable balloonImageZoomed, int sceneWidth) {
+        drawer = new BalloonDrawer(balloonImage, balloonImageZoomed);
         physics = new BalloonPhysics(sceneWidth, drawer.width());
         fuelDrawer = new FuelGaugeDrawer();
         width = drawer.width();
@@ -22,11 +24,11 @@ public class Balloon  {
     }
 
     public int landingAreaXPosStart() {
-        return drawer.getLandingAreaXStart() + physics.roundedX;
+        return LANDABLE_SURFACE_X_START + physics.roundedX;
     }
 
     public int landingAreaXPosEnd() {
-        return drawer.getLandingAreaXEnd() + physics.roundedX;
+        return LANDABLE_SURFACE_X_END + physics.roundedX;
     }
 
     public void updatePhysics(long now) {

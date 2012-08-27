@@ -14,9 +14,9 @@ class BalloonDrawer {
     private Paint paint = new Paint();
     private Bitmap bitmap, zoomed3Bitmap;
 
-    BalloonDrawer(Drawable balloon, Drawable zoomed3Balloon){
+    BalloonDrawer(Drawable balloon, Drawable balloonZoomed){
         this.bitmap = ((BitmapDrawable) balloon).getBitmap();
-        this.zoomed3Bitmap = ((BitmapDrawable) zoomed3Balloon).getBitmap();
+        this.zoomed3Bitmap = ((BitmapDrawable) balloonZoomed).getBitmap();
     }
 
     boolean transparent(int x, int y){
@@ -31,18 +31,10 @@ class BalloonDrawer {
         return bitmap.getHeight();
     }
 
-    int getLandingAreaXStart(){
-        return 15;
-    }
-
-    int getLandingAreaXEnd(){
-        return 19;
-    }
-
     void drawOnCanvas(Canvas c, int x, int y, int zoomLevel){
         if(zoomLevel > 1){
-            c.drawBitmap(zoomed3Bitmap, (float) (x * zoomLevel - zoomBoxXPos(zoomLevel, c.getWidth(), x)),
-                    (float) (y * zoomLevel - zoomBoxYPos(zoomLevel, c.getHeight(), y)), paint);
+            c.drawBitmap(zoomed3Bitmap, (float) (x * zoomLevel - zoomBoxXPos(zoomLevel, c.getWidth(), x, width())),
+                    (float) (y * zoomLevel - zoomBoxYPos(zoomLevel, c.getHeight(), y, height())), paint);
         }else{
             c.drawBitmap(bitmap, (float) x, (float) y, paint);
         }

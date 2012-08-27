@@ -6,11 +6,6 @@ import android.graphics.Path;
 
 import java.util.TreeSet;
 
-import static com.sagen.balloonlander.ZoomUtil.zoomBoxXPos;
-import static com.sagen.balloonlander.ZoomUtil.zoomBoxYPos;
-import static java.lang.Integer.MAX_VALUE;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 
 public class Terrain extends TreeSet<TerrainPoint> {
     public Path orgPath, transformedPath;
@@ -65,8 +60,12 @@ public class Terrain extends TreeSet<TerrainPoint> {
                 && yPos >= landingStart.y && xPosFrom < landingEnd.x && xPosTo > landingStart.x;
     }
 
-    public void drawOnCanvas(Canvas c, int zoomLevel, int xViewPos, int yViewPos){
-        terrainDrawer.draw(this, c, zoomLevel, xViewPos, yViewPos);
+    public void drawOnCanvas(Canvas c){
+        terrainDrawer.draw(this, c);
+    }
+
+    public void drawOnCanvas(Canvas c, int zoomLevel, int balloonX, int balloonY, int balloonWidth, int balloonHeight){
+        terrainDrawer.draw(this, c, zoomLevel, balloonX, balloonY, balloonWidth, balloonHeight);
     }
 
 

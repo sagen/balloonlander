@@ -34,7 +34,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
         public void run() {
             while (true) {
                 Balloon balloon = new Balloon(getResources().getDrawable(R.drawable.balloon),
-                        getResources().getDrawable(R.drawable.balloon_zoom3), getWidth());
+                        getResources().getDrawable(R.drawable.balloon_zoom2), getWidth());
                 gameLoop = new GameLoop(balloon, surfaceHolder, getWidth(), getHeight());
                 setOnTouchListener(gameLoop);
                 gameLoop.start();
