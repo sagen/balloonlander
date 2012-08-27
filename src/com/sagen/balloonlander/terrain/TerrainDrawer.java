@@ -4,8 +4,8 @@ import android.graphics.*;
 
 import static android.graphics.Color.GREEN;
 import static android.graphics.Paint.Style.FILL;
-import static com.sagen.balloonlander.ZoomUtil.zoomBoxXPos;
-import static com.sagen.balloonlander.ZoomUtil.zoomBoxYPos;
+import static com.sagen.balloonlander.util.ZoomUtil.zoomBoxXPos;
+import static com.sagen.balloonlander.util.ZoomUtil.zoomBoxYPos;
 
 public class TerrainDrawer {
     public static final int LANDING_SPOT_HEIGHT = 5;

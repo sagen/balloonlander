@@ -1,4 +1,4 @@
-package com.sagen.balloonlander;
+package com.sagen.balloonlander.util;
 
 
 import com.sagen.balloonlander.balloon.BalloonController;
@@ -27,7 +27,7 @@ public class ProximityDetector {
     }
 
     public static boolean landedHard(BalloonController balloon){
-        return abs(balloon.dx()) > 0.5 || abs(balloon.dy()) > 1;
+        return abs(balloon.dx()) > 0.5 || abs(balloon.dy()) > 0.7;
     }
 
     public static boolean shouldZoom(BalloonController balloon, Terrain terrain){

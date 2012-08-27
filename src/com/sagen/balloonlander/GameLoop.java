@@ -7,12 +7,15 @@ import android.view.View;
 import com.sagen.R;
 import com.sagen.balloonlander.balloon.BalloonController;
 import com.sagen.balloonlander.terrain.Terrain;
+import com.sagen.balloonlander.util.ArrowDrawer;
+import com.sagen.balloonlander.util.DebugDrawer;
 
 import static android.graphics.Color.BLACK;
 import static android.view.MotionEvent.*;
 import static com.sagen.R.drawable.*;
-import static com.sagen.balloonlander.DebugDrawer.*;
-import static com.sagen.balloonlander.ProximityDetector.*;
+import static com.sagen.balloonlander.util.DebugDrawer.*;
+import static com.sagen.balloonlander.util.ProximityDetector.*;
+import static com.sagen.balloonlander.util.ScoreUtil.getScoreAfterLanding;
 import static com.sagen.balloonlander.terrain.TerrainCreator.generateTerrain;
 import static java.lang.System.nanoTime;
 
@@ -74,7 +77,7 @@ public class GameLoop extends Thread implements View.OnTouchListener {
                 if (landedHard(balloon)) {
                     drawDebugInfoLandedTooHard(c);
                 } else {
-                    drawDebugInfoLanded(c);
+                    drawDebugInfoLanded(c, getScoreAfterLanding(balloon));
                 }
                 break;
             }

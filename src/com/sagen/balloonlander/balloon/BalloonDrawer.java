@@ -7,8 +7,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import static android.graphics.Color.TRANSPARENT;
-import static com.sagen.balloonlander.ZoomUtil.zoomBoxXPos;
-import static com.sagen.balloonlander.ZoomUtil.zoomBoxYPos;
+import static com.sagen.balloonlander.util.ZoomUtil.zoomBoxXPos;
+import static com.sagen.balloonlander.util.ZoomUtil.zoomBoxYPos;
 
 class BalloonDrawer {
     private Paint paint = new Paint();

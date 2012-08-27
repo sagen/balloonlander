@@ -1,4 +1,4 @@
-package com.sagen.balloonlander;
+package com.sagen.balloonlander.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,7 +13,7 @@ public class ArrowDrawer {
     private Bitmap up, left, right;
     private Paint paint;
 
-    ArrowDrawer(Drawable arrow) {
+    public ArrowDrawer(Drawable arrow) {
         this.up = ((BitmapDrawable)arrow).getBitmap();
         Matrix rightTransformation = new Matrix();
         rightTransformation.setRotate(90);
@@ -24,7 +24,7 @@ public class ArrowDrawer {
         this.paint = new Paint();
     }
 
-    void drawOnCanvas(Canvas c){
+    public void drawOnCanvas(Canvas c){
         c.drawBitmap(right, 10, c.getHeight() - 10 - right.getHeight(), paint);
         c.drawBitmap(left, c.getWidth() - 10 - left.getWidth(), c.getHeight() - 10 - left.getHeight(), paint);
         c.drawBitmap(up, c.getWidth() / 2 - up.getWidth() / 2, c.getHeight() - 10 - up.getHeight(), paint);

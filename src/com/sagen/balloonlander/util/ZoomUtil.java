@@ -1,4 +1,4 @@
-package com.sagen.balloonlander;
+package com.sagen.balloonlander.util;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
