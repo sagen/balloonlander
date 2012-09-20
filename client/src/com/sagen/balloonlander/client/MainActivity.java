@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new Panel(this));
-        Button button = new Button(this);
+       /* Button button = new Button(this);
         RelativeLayout ll = new RelativeLayout(this);
 
         ll.setLayoutParams(new LayoutParams(MATCH_PARENT, MATCH_PARENT));
@@ -28,6 +28,6 @@ public class MainActivity extends Activity {
         button.setTop(100);
 
         ll.addView(button);
-        addContentView(ll, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        addContentView(ll, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));*/
     }
 }
